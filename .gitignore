@@ -1,0 +1,38 @@
+# Virtual Environment
+first_rag_env/
+venv/
+ENV/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# Model cache
+.huggingface/
+models/
+*.safetensors
+*.bin
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.streamlit/secrets.toml
+.env
+
+# Logs
+*.log
