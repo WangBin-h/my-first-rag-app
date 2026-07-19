@@ -11,6 +11,10 @@ import os
 
 load_dotenv()
 
+PDF_PATH = os.path.join(os.path.dirname(__file__), "test.pdf")
+VECTORSTORE_PATH = os.path.join(os.path.dirname(__file__), "vectorstore")
+DOCUMENT_NAME = "数据结构_南京审计大学.pdf"
+
 class OfflineSentenceTransformerEmbeddings(Embeddings):
     def __init__(self, model_name, cache_folder=None, device="cpu"):
         self.model_name = model_name
@@ -88,18 +92,9 @@ class OfflineSentenceTransformerEmbeddings(Embeddings):
         )
         return embedding.tolist()
 
-PDF_PATH = os.path.join(os.path.dirname(__file__), "test.pdf")
-VECTORSTORE_PATH = os.path.join(os.path.dirname(__file__), "vectorstore")
-DOCUMENT_NAME = "数据结构_南京审计大学.pdf"
-
 def init_vectorstore():
     if "db" not in st.session_state or "retriever" not in st.session_state or "rag_chain" not in st.session_state:
         with st.spinner("正在初始化向量库..."):
-            api_key = os.getenv("SILICONFLOW_API_KEY")
-            if not api_key:
-                st.error("未设置 SILICONFLOW_API_KEY 环境变量，请在 .env 文件中配置")
-                return False
-            
             os.environ["TRANSFORMERS_OFFLINE"] = "1"
             os.environ["HF_HUB_OFFLINE"] = "1"
             os.environ["HF_ENDPOINT"] = ""
@@ -149,6 +144,11 @@ def init_vectorstore():
 问题：{question}"""
             
             prompt = ChatPromptTemplate.from_template(template)
+            
+            api_key = os.getenv("SILICONFLOW_API_KEY")
+            if not api_key:
+                st.error("未设置 SILICONFLOW_API_KEY 环境变量，请在 .env 文件中配置")
+                return False
             
             llm = ChatOpenAI(
                 model="Qwen/Qwen2.5-7B-Instruct",
@@ -249,7 +249,7 @@ def main():
                 })
     
     st.divider()
-    st.markdown("⚡ 使用技术：LangChain + FAISS + Qwen2.5")
+    st.markdown("⚡ 使用技术：LangChain + FAISS + Ollama")
 
 if __name__ == "__main__":
     main()
